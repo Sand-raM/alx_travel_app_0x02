@@ -22,6 +22,7 @@ from drf_yasg import openapi
 from django.http import HttpResponse
 from django.urls import path, include
 from .views import get_listings, create_booking, initiate_payment, verify_payment
+from . import views
 schema_view = get_schema_view(
    openapi.Info(
       title="ALX Travel App API",
@@ -54,4 +55,6 @@ urlpatterns = [
     path("bookings/", create_booking, name="create_booking"),
     path("payment/initiate/", initiate_payment, name="initiate_payment"),
     path("payment/verify/", verify_payment, name="verify_payment"),
+    path('payment/initiate/<int:booking_id>/', views.initiate_booking_payment, name='initiate_payment'),
+    path('payment/verify/<str:transaction_id>/', views.verify_payment_view, name='verify_payment'),
 ]

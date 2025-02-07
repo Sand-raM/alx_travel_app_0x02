@@ -1,9 +1,9 @@
 import environ
 import os
 
-CHAPA_SECRET_KEY = os.getenv("CHAPA_SECRET_KEY")
 env = environ.Env()
 environ.Env.read_env()
+CHAPA_SECRET_KEY = os.getenv("CHAPA_SECRET_KEY")
 
 """
 Django settings for alx_travel_app project.
@@ -169,3 +169,6 @@ CELERY_TASK_SERIALIZER = 'json'
 # Optional: Celery result backend (e.g., for debugging or saving task states)
 CELERY_RESULT_BACKEND = 'django-db'
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Example for Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Redis backend for results
+CELERY_TIMEZONE = 'UTC'
