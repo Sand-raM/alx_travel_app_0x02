@@ -59,25 +59,23 @@ def initiate_booking_payment(request):
 
 
 @api_view(['GET'])
-def verify_payment_view(request):
+def verify_payment_view(request, transaction_id):
     """
     Verifies a payment transaction with Chapa and updates payment status.
     """
-    tx_ref = request.GET.get("tx_ref")
-    
-    if not tx_ref:
+    if not transaction_id:
         return Response({"error": "Transaction reference missing"}, status=400)
-    
+
     # Verifying payment using the function from chapa.py
-    payment_status = verify_payment(tx_ref)
-    
+    payment_status = verify_payment(transaction_id)
+
     if payment_status:
-        payment = Payment.objects.get(transaction_id=tx_ref)
+        payment = Payment.objects.get(transaction_id=transaction_id)
         payment.status = "Completed"
         payment.save()
-        
+
         # Triggering the email notification for successful payment
         send_payment_confirmation.delay(payment.booking.user_email)
         return Response({"message": "Payment successful"})
-    
+
     return Response({"error": "Payment failed"}, status=400)
